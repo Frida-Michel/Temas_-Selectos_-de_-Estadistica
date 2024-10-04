@@ -64,19 +64,26 @@ GROUP BY
 ```SQL
 -- poner solución debajo de este mensaje
 SELECT 
-	a.nombre, 
-	a.apellido, 
-	b.nombre_materia  materia, 
-	b.calificacion  calificación_sup_al_prom
+        a.nombre, 
+        a.apellido, 
+        AVG(b.calificacion)  AS calificación_prom
 FROM 
-	calificaciones b
-INNER JOIN 
-	alumnos a 
-USING(expediente)
-WHERE b.calificacion > (
-    SELECT AVG(calificacion)
-    FROM calificaciones
-    WHERE calificacion IS NOT NULL
-);
+        alumnos a
+LEFT JOIN 
+         calificaciones b
+ON 
+        a.expediente=b.expediente
+WHERE    
+          b.calificacion  IS NOT NULL
+GROUP BY 
+          a.nombre, a.apellido
+HAVING 
+          calificación_prom > ( SELECT AVG(calificacion)
+FROM 
+          calificaciones
+WHERE 
+       calificacion IS NOT NULL);
+
+
 
 ```
