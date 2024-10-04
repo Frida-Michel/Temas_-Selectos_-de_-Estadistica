@@ -1,0 +1,82 @@
+#######################################################################################################################################
+# Teoría
+
+1. 
+#--------------------------------------------------------------------------------------------------------------------------------------
+---a) Como excepciones o casos avanzados que van más allá de las primeras tres formas normales.
+2. 
+#--------------------------------------------------------------------------------------------------------------------------------------
+--- WHERE Filtra las filas antes de la agrupación, mientras que HAVING filtra los grupos después de la agrupación.
+3. 
+#--------------------------------------------------------------------------------------------------------------------------------------
+--- c) FROM -> WHERE -> SELECT -> ORDER BY
+4. 
+#--------------------------------------------------------------------------------------------------------------------------------------
+--- a) Anomalía de inserción, eliminación y actualización.
+5.
+--- En el meme se puede ver que el avión representa la conexión entre mi repositorio local y uno remoto, 
+--- que al hacerse los cambios que se tenían que hacer este ya está listo para "despegar" 
+--- y hacer llegar la información del repositorio local al otro, 
+--- pero como se ejecutó primero el git push y después del git add, 
+--- los archivos que en este caso son las personas no pudieron llegar al otro repositorio, 
+--- ya que el avión "despegó" mucho antes de que estos pudieran subirse por lo que nuestros "archivos" se mantuvieron en nuestro repositorio local 
+--- y no llegaron al repositorio remoto.
+#######################################################################################################################################
+# Práctica
+
+1.
+
+```SQL
+-- poner solución debajo de este mensaje
+SELECT
+	AVG(edad) AS edad_promedio
+	
+FROM
+	alumnos
+WHERE
+	apellido LIKE "%ez";
+
+```
+
+2.
+
+```SQL
+-- poner solución debajo de este mensaje
+SELECT 
+    a.nombre, 
+    a.apellido, 
+    MAX(b.calificacion) calificación_máxima
+FROM 
+    alumnos a
+LEFT JOIN 
+	calificaciones b 
+ON 
+	a.expediente = b.expediente
+WHERE 
+	b.calificacion IS NOT NULL
+GROUP BY 
+	a.expediente, a.nombre, a.apellido;
+
+```
+
+3.
+
+```SQL
+-- poner solución debajo de este mensaje
+SELECT 
+	a.nombre, 
+	a.apellido, 
+	b.nombre_materia  materia, 
+	b.calificacion  calificación_sup_al_prom
+FROM 
+	calificaciones b
+INNER JOIN 
+	alumnos a 
+USING(expediente)
+WHERE b.calificacion > (
+    SELECT AVG(calificacion)
+    FROM calificaciones
+    WHERE calificacion IS NOT NULL
+);
+
+```
